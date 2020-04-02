@@ -3,6 +3,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart'as html;
 
+import 'genres_photo.dart';
+
 class GenresPage extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -38,7 +40,7 @@ class PageState extends State<GenresPage>{
       html.Element a = element2.children[0];
       String url = a.attributes["href"];
       String name = a.text;
-      map["url"] = url;
+      map["url"] = url.substring(url.lastIndexOf('_')+1,url.lastIndexOf('/'));
       map["name"] = name;
       print(map);
       _genres.add(map);
@@ -56,7 +58,10 @@ class PageState extends State<GenresPage>{
     return GridView.count(
         children: _genres.map((map) =>
             gridItem(map["name"], map["background"], map["url"], () {
-
+                Navigator.of(context)
+                    .push(MaterialPageRoute(
+                    builder: (ctx)=>GenresPhotoPage(map["url"]))
+                );
             })).toList(),
         childAspectRatio: 2,
         crossAxisCount: 2,

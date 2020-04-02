@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'GenresPage.dart';
+import 'genres_page.dart';
 
 void main() => runApp(MyApp());
 
