@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:html/dom.dart'as html;
 
 void main() => runApp(MyApp());
 
@@ -17,6 +19,21 @@ class PageState extends State<MyApp>{
   void initState() {
     loadGenres();
     super.initState();
+  }
+
+  loadHtml() async {
+    Dio dio = Dio();
+    Response response = await dio.get("https://35photo.pro/genre/");
+    html.Document document = html.Document.html(response.data);
+    List<html.Element> element = document.getElementsByClassName("parentGenre");
+    element.forEach((e){
+      html.Element element1 = e.children[0];
+      var style = element1.attributes["style"];
+      RegExp regExp = RegExp("http.*?jpg");
+      Match match = regExp.firstMatch(style);
+      String background = match.group(0);
+      print(background);
+    });
   }
 
   loadGenres(){
@@ -48,6 +65,7 @@ class PageState extends State<MyApp>{
 
   @override
   Widget build(BuildContext context) {
-    return null;
+    loadHtml();
+    return Container();
   }
 }
