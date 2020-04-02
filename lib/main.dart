@@ -27,12 +27,22 @@ class PageState extends State<MyApp>{
     html.Document document = html.Document.html(response.data);
     List<html.Element> element = document.getElementsByClassName("parentGenre");
     element.forEach((e){
+      Map map = Map();
       html.Element element1 = e.children[0];
       var style = element1.attributes["style"];
       RegExp regExp = RegExp("http.*?jpg");
       Match match = regExp.firstMatch(style);
       String background = match.group(0);
-      print(background);
+      map["background"] = background;
+
+      html.Element element2 = e.children[1];
+      html.Element a = element2.children[0];
+      String url = a.attributes["href"];
+      String name = a.text;
+      map["url"] = url;
+      map["name"] = name;
+      print(map);
+      _genres.add(map);
     });
   }
 
