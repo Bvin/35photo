@@ -1,10 +1,11 @@
 import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:html/dom.dart' as html;
+
+import 'gallary_page.dart';
 
 class GenresPhotoPage extends StatefulWidget{
 
@@ -58,6 +59,9 @@ class PageState extends State<GenresPhotoPage>{
         itemCount: _photos.length,
         itemBuilder: (ctx,index)=> GestureDetector(
           child: CachedNetworkImage(imageUrl: _photos[index].attributes["src"]),
+          onTap: (){
+            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => GalleryPage(_photos, index)));
+          },
         ),
         staggeredTileBuilder: (index) => StaggeredTile.fit(1),
     );
