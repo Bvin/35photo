@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:photo35/photo_page.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:html/dom.dart' as html;
 
@@ -53,8 +54,11 @@ class PageState extends State<GalleryPage>{
               Navigator.of(context).pop();
             },),
             trailing: GestureDetector(child: Icon(Icons.zoom_out_map), onTap: (){
-              var url = widget.photos[_pageController.page.floor()].attributes["url"];
-              url = "https://gallery.1x.com" + url.replaceAll("ld", "hd4");
+              var url = widget.photos[_pageController.page.floor()].parent.attributes["href"];
+              String photoId = url.substring(url.lastIndexOf('_')+1, url.lastIndexOf('/'));
+              print(photoId);
+              url = "https://m1.35photo.pro/photos_main/900/" + photoId+".jpg";
+              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => PhotoPage(url)));
             },),
           ),
         )
