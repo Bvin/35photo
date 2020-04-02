@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:html/dom.dart' as html;
 
 class GenresPhotoPage extends StatefulWidget{
 
@@ -21,7 +22,7 @@ class PageState extends State<GenresPhotoPage>{
   Dio _dio;
   bool _showLoading = false;
   List<Map> _photos;
-  int _lastId = 4501815;
+  int _lastId = 0;
 
   @override
   void initState() {
@@ -84,10 +85,18 @@ class PageState extends State<GenresPhotoPage>{
         }
     );
     String data = response.data;
-    print(data);
     Map map = json.decode(data);
     //_lastId = map["lastId"];
-    print(map["data"]);
+    html.Document document = html.Document.html(map["data"]);
+    List<html.Element> elements = document.getElementsByClassName("showPrevPhoto");
+    elements.forEach((e){
+      String src = e.attributes["src"];
+      String alt = e.attributes["alt"];
+      String title = e.attributes["title"];
+      print(e);
+    });
+
+    //print(map["data"]);
   }
 
 }
