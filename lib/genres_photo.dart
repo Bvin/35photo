@@ -21,12 +21,13 @@ class PageState extends State<GenresPhotoPage>{
 
   Dio _dio;
   bool _showLoading = false;
-  List<Map> _photos;
+  List<html.Element> _photos;
   int _lastId = 0;
 
   @override
   void initState() {
     _dio = Dio();
+    _photos = List();
     load(widget.genreId, _lastId);
     super.initState();
   }
@@ -37,6 +38,7 @@ class PageState extends State<GenresPhotoPage>{
       home: Scaffold(
         body: body(),
       ),
+      theme: ThemeData.dark(),
     );
   }
 
@@ -55,7 +57,7 @@ class PageState extends State<GenresPhotoPage>{
         crossAxisCount: 2,
         itemCount: _photos.length,
         itemBuilder: (ctx,index)=> GestureDetector(
-          child: CachedNetworkImage(imageUrl: _photos[index]["img"]),
+          child: CachedNetworkImage(imageUrl: _photos[index].attributes["src"]),
         ),
         staggeredTileBuilder: (index) => StaggeredTile.fit(1),
     );
@@ -89,6 +91,8 @@ class PageState extends State<GenresPhotoPage>{
     //_lastId = map["lastId"];
     html.Document document = html.Document.html(map["data"]);
     List<html.Element> elements = document.getElementsByClassName("showPrevPhoto");
+    _photos.addAll(elements);
+    setState(() {});
     elements.forEach((e){
       String src = e.attributes["src"];
       String alt = e.attributes["alt"];

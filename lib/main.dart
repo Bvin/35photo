@@ -56,6 +56,7 @@ class PageState extends State<MyApp>{
           BottomNavigationBarItem(icon: Icon(Icons.explore),title: Text("Genres")),
         ]),
       ),
+      theme: ThemeData.dark(),
     );
   }
 }
