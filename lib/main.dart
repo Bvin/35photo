@@ -1,6 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:html/dom.dart'as html;
+import 'GenresPage.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,32 +19,6 @@ class PageState extends State<MyApp>{
     loadGenres();
     super.initState();
   }
-
-  loadHtml() async {
-    Dio dio = Dio();
-    Response response = await dio.get("https://35photo.pro/genre/");
-    html.Document document = html.Document.html(response.data);
-    List<html.Element> element = document.getElementsByClassName("parentGenre");
-    element.forEach((e){
-      Map map = Map();
-      html.Element element1 = e.children[0];
-      var style = element1.attributes["style"];
-      RegExp regExp = RegExp("http.*?jpg");
-      Match match = regExp.firstMatch(style);
-      String background = match.group(0);
-      map["background"] = background;
-
-      html.Element element2 = e.children[1];
-      html.Element a = element2.children[0];
-      String url = a.attributes["href"];
-      String name = a.text;
-      map["url"] = url;
-      map["name"] = name;
-      print(map);
-      _genres.add(map);
-    });
-  }
-
   loadGenres(){
     _genres = <Map>[
       {"category_id":0,"category_name":"Home","display_name":"Home",},
@@ -75,7 +48,14 @@ class PageState extends State<MyApp>{
 
   @override
   Widget build(BuildContext context) {
-    loadHtml();
-    return Container();
+    return MaterialApp(
+      home: Scaffold(
+        body: GenresPage(),
+        bottomNavigationBar: BottomNavigationBar(items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.home),title: Text("Home")),
+          BottomNavigationBarItem(icon: Icon(Icons.explore),title: Text("Genres")),
+        ]),
+      ),
+    );
   }
 }
