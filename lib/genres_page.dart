@@ -24,7 +24,9 @@ class PageState extends State<GenresPage>{
 
   loadHtml() async {
     Dio dio = Dio();
-    Response response = await dio.get("https://35photo.pro/genre/");
+    Response response = await dio.get("https://35photo.pro/genre/",
+        options: Options(headers: {"Cookie":"nude=true"})//nude
+    );
     html.Document document = html.Document.html(response.data);
     List<html.Element> element = document.getElementsByClassName("parentGenre");
     element.forEach((e){
