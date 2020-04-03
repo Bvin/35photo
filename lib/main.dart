@@ -1,6 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'genres_page.dart';
 import 'tabs/home_tab.dart';
+import 'package:html/dom.dart' as html;
 
 void main() => runApp(MyApp());
 
@@ -13,48 +15,29 @@ class MyApp extends StatefulWidget {
 
 class PageState extends State<MyApp>{
 
-  List<Map> _genres;
   List<Widget> _tabBodies;
   int currentPage = 0;
+  Dio _dio;
+  List<Map> recommend;
+  List<Map> authors;
 
   @override
   void initState() {
-    loadGenres();
-    _tabBodies = [HomeTab(), GenresPage()];
+    _dio = Dio();
+    recommend = List();
+    authors = List();
+    loadHtml();
     super.initState();
   }
-  loadGenres(){
-    _genres = <Map>[
-      {"category_id":0,"category_name":"Home","display_name":"Home",},
-      {"category_id":1,"category_name":"action","display_name":"Action",},
-      {"category_id":2,"category_name":"macro","display_name":"Macro",},
-      {"category_id":3,"category_name":"humour","display_name":"Humour",},
-      {"category_id":4,"category_name":"mood","display_name":"Mood",},
-      {"category_id":5,"category_name":"wildlife","display_name":"Wildlife",},
-      {"category_id":6,"category_name":"landscape","display_name":"Landscape",},
-      {"category_id":7,"category_name":"street","display_name":"Street",},
-      {"category_id":8,"category_name":"documentary","display_name":"Documentary",},
-      {"category_id":9,"category_name":"night","display_name":"Night",},
-      {"category_id":10,"category_name":"creative-edit","display_name":"Creative Edit",},
-      {"category_id":11,"category_name":"architecture","display_name":"Architecture",},
-      {"category_id":12,"category_name":"fine-art-nude","display_name":"Fine-art-nude",},
-      {"category_id":13,"category_name":"portrait","display_name":"Portrait",},
-      {"category_id":14,"category_name":"everyday","display_name":"Everyday",},
-      {"category_id":15,"category_name":"abstract","display_name":"Abstract",},
 
-      {"category_id":17,"category_name":"conceptual","display_name":"Conceptual",},
-      {"category_id":18,"category_name":"still-life","display_name":"Still-life",},
-      {"category_id":19,"category_name":"performance","display_name":"Performance",},
-      {"category_id":20,"category_name":"underwater","display_name":"Underwater",},
-      {"category_id":21,"category_name":"animals","display_name":"Animals",},
-    ];
+  loadGenres(){
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: _tabBodies[currentPage],
+        body: _tabBodies == null ? Container() : _tabBodies[currentPage],
         bottomNavigationBar: BottomNavigationBar(
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
@@ -70,5 +53,64 @@ class PageState extends State<MyApp>{
       ),
       theme: ThemeData.dark(),
     );
+  }
+
+
+  loadHtml() async {
+    Response response = await _dio.get("https://35photo.pro/",
+        options: Options(
+            headers: {
+              "Cookie":"user_login=bvin;token2=300d307489ac74db963ce362ae43833d;nude=true;"
+            }
+          //Cookie: user_lang=en;
+          // _ga=GA1.2.1675562080.1585727189;
+          // _gid=GA1.2.1999997836.1585727189;
+          // _fbp=fb.1.1585727189511.1481881805;
+          // _ym_uid=15857915721044290429;
+          // _ym_d=1585791572;
+          // user_login=bvin;
+          // token2=300d307489ac74db963ce362ae43833d;
+          // user_status=new;
+          // me=1c8288be0961a35ce165492f52a4ed1d;
+          // nude=true;
+          // _ym_isad=2;
+          // PHPSESSID=a0m6l632om2m4sqr3140tp7qf2;
+          // user_lastEnter=1585880109;
+          // session=a0m6l632om2m4sqr3140tp7qf2;
+          // _gat=1;
+          // _ym_visorc_52086456=w
+        )
+    );
+    html.Document document = html.Document.html(response.data);
+    List<html.Element> elements = document.getElementsByClassName("col-md-3 col-xs-6");
+    elements.forEach((e){
+      Map map = Map();
+      map["genre"] = e.children[0].text;
+      html.Element children1 = e.getElementsByClassName("parentGenre")[0];
+      String href = children1.attributes["onclick"];
+      map["url"] = href.substring(href.indexOf('\'')+1,href.lastIndexOf('\''),);
+      String style = children1.children[0].attributes["style"];
+      map["img"] = style.substring(style.indexOf("https"),style.indexOf("jpg")+3);
+      map["author"] = children1.children[1].text;
+      //print(map);
+      recommend.add(map);
+    });
+
+    List<html.Element> part2 = document.getElementsByClassName("col-md-6 shadowFont");
+    part2.forEach((e){
+      Map map = Map();
+      html.Element e0 = e.children[0];//a
+      map["url"] = e0.attributes["href"];//
+      map["img"] = e0.children[0].attributes["src"];
+
+      html.Element e1 = e.children[1].children[0];//
+      map["avatar"] = e1.children[0].attributes["src"];
+      map["title"] = e1.children[1].text;
+      map["subtitle"] = e1.children[2].text;
+      recommend.add(map);
+    });
+
+    _tabBodies = [HomeTab(recommend), GenresPage()];
+    setState(() {});
   }
 }
