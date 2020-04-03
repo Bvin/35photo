@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:photo35/tabs/explore_tab.dart';
 import 'genres_page.dart';
 import 'tabs/home_tab.dart';
 import 'package:html/dom.dart' as html;
@@ -110,7 +111,32 @@ class PageState extends State<MyApp>{
       recommend.add(map);
     });
 
-    _tabBodies = [HomeTab(recommend), GenresPage()];
+    List<html.Element> authorsElement = document.getElementsByClassName("col-md-6");
+    print(authorsElement.length);
+    authorsElement.forEach((e){
+      if(e.children.length == 2) {
+        Map map = Map();
+        html.Element c1 = e.children[0]; //第一行
+        map["avatar"] = c1.children[0].attributes["src"];
+        map["author"] = c1.children[1].text;
+        map["url"] = c1.children[1].attributes["href"];
+
+        html.Element c2 = e.children[1]; //第2行
+        List<Map> images = List();
+        c2.children.forEach((e) {
+          Map map = Map();
+          html.Element a = e.children[0]; //a
+          map["url"] = a.attributes["href"];
+          map["img"] = a.children[0].attributes["src"]; //img
+          images.add(map);
+        });
+        map["photos"] = images;
+        authors.add(map);
+      }
+    });
+
+
+    _tabBodies = [HomeTab(recommend), ExploreTab(authors), GenresPage()];
     setState(() {});
   }
 }
