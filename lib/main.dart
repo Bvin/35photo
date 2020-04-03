@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'genres_page.dart';
+import 'tabs/home_tab.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,10 +14,13 @@ class MyApp extends StatefulWidget {
 class PageState extends State<MyApp>{
 
   List<Map> _genres;
+  List<Widget> _tabBodies;
+  int currentPage = 0;
 
   @override
   void initState() {
     loadGenres();
+    _tabBodies = [HomeTab(), GenresPage()];
     super.initState();
   }
   loadGenres(){
@@ -50,11 +54,19 @@ class PageState extends State<MyApp>{
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: GenresPage(),
-        bottomNavigationBar: BottomNavigationBar(items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home),title: Text("Home")),
-          BottomNavigationBarItem(icon: Icon(Icons.explore),title: Text("Genres")),
-        ]),
+        body: _tabBodies[currentPage],
+        bottomNavigationBar: BottomNavigationBar(
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.home), title: Text("Home")),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.explore), title: Text("Genres")),
+            ],
+          onTap: (index){
+            currentPage = index;
+            setState(() {});
+          },
+        ),
       ),
       theme: ThemeData.dark(),
     );
