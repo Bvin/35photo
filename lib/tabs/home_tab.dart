@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:html/dom.dart' as html;
 
 class HomeTab extends StatefulWidget{
@@ -27,41 +28,48 @@ class TabState extends State<HomeTab>{
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      Expanded(child: GridView.count(crossAxisCount: 2,
-        mainAxisSpacing: 5,
-        crossAxisSpacing: 5,
-        children: recommend.map(
-                (map) => gridItem(map["genre"], map["img"], map["author"])
-        ).toList(),))
-      ,
-      hots.isEmpty ? Container() :
-      Row(
-        children: <Widget>[
-          Expanded(child: card(hots[0])),
-          Expanded(child: card(hots[1]))
-        ],
-      )
-    ],);
+    return grid();
   }
 
-  Widget gridItem(genre,imageUrl, author){
+  grid(){
+    if(recommend.isEmpty) return Container();
+    return StaggeredGridView.countBuilder(
+      itemCount: recommend.length,
+        crossAxisCount: 4,
+        itemBuilder: (ctx,index){
+          if(index<4){
+            return gridItem(recommend[index]);
+          }else{
+            return card(recommend[index]);
+          }
+        },
+        staggeredTileBuilder: (index){
+          if(index<4){
+            return StaggeredTile.count(2, 3);
+          }else{
+            return StaggeredTile.count(index.isEven?1:3, 2);
+          }
+        },
+    );
+  }
+
+  Widget gridItem(map){
     return Container(
       child: Column(
         children: <Widget>[
           Padding(
             padding: EdgeInsets.all(10),
-            child: Text(genre,),
+            child: Text(map["genre"],),
           ),
           Expanded(
             child: Container(
               child: Stack(
                 children: <Widget>[
-                  CachedNetworkImage(imageUrl: imageUrl, fit: BoxFit.cover,),
+                  CachedNetworkImage(imageUrl: map["img"], fit: BoxFit.cover,),
                   Positioned(
                     bottom: 0,
                     left: 1,
-                    child: Text(author,),
+                    child: Text(map["author"],),
                   ),
                 ],
                 fit: StackFit.expand,
@@ -77,16 +85,23 @@ class TabState extends State<HomeTab>{
   }
 
   card(map) {
-    return Stack(
-      children: <Widget>[
-        CachedNetworkImage(imageUrl: map["img"]),
-        ListTile(
-          leading: CircleAvatar(
-            backgroundImage: CachedNetworkImageProvider(map["avatar"]),),
-          title: Text(map["title"]),
-          subtitle: Text(map["subtitle"]),
-        )
-      ],
+    return Container(
+      child: Stack(
+        children: <Widget>[
+          ListTile(
+            leading: CircleAvatar(
+              backgroundImage: CachedNetworkImageProvider(map["avatar"]),),
+            title: Text(map["title"]),
+            subtitle: Text(map["subtitle"]),
+          )
+        ],
+      ),
+      decoration: BoxDecoration(
+          image: DecorationImage(
+              image: CachedNetworkImageProvider(map["img"]),
+              fit: BoxFit.cover
+          )
+      ),
     );
   }
 
@@ -143,7 +158,7 @@ class TabState extends State<HomeTab>{
       map["subtitle"] = e1.children[2].text;
       hots.add(map);
     });
-
+    recommend.addAll(hots);
     setState(() {});
   }
 }
