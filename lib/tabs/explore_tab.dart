@@ -24,8 +24,9 @@ class TabState extends State<ExploreTab>{
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: body(),
+        body: SafeArea(child: body()),
       ),
+      theme: ThemeData.dark(),
     );
   }
 
@@ -51,18 +52,23 @@ class TabState extends State<ExploreTab>{
   }
 
   Widget author(map){
-    return Column(
+    return Padding(padding: EdgeInsets.all(15), child: Column(
       children: <Widget>[
         Row(children: <Widget>[
-          CircleAvatar(backgroundImage: CachedNetworkImageProvider(map["avatar"]),),
-          Text(map["author"]),
+          Padding(padding: EdgeInsets.only(right: 10, bottom: 10),
+            child: CircleAvatar(
+              backgroundImage: CachedNetworkImageProvider(map["avatar"]),
+            ),
+          ),
+          Padding(padding: EdgeInsets.only(bottom: 10),
+              child: Text(map["author"], style: TextStyle(fontSize: 18),)),
         ],),
         Row(
           children: imgs(map["photos"]),
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         )
       ],
-    );
+    ),);
   }
 
   List<Widget> imgs(List<Map> maps){
@@ -71,7 +77,7 @@ class TabState extends State<ExploreTab>{
 
   Widget clickImage(m){
     return GestureDetector(
-      child: CachedNetworkImage(imageUrl: m["img"]),
+      child: CachedNetworkImage(imageUrl: m["img"], fit: BoxFit.cover,height: 100,),
       onTap: (){
         print(m["url"]);
       },
