@@ -44,7 +44,9 @@ class PageState extends State<MyApp>{
               BottomNavigationBarItem(
                   icon: Icon(Icons.home), title: Text("Home")),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.explore), title: Text("Genres")),
+                  icon: Icon(Icons.explore), title: Text("Explore")),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.category), title: Text("Genres")),
             ],
           onTap: (index){
             currentPage = index;
@@ -117,21 +119,26 @@ class PageState extends State<MyApp>{
       if(e.children.length == 2) {
         Map map = Map();
         html.Element c1 = e.children[0]; //第一行
-        map["avatar"] = c1.children[0].attributes["src"];
-        map["author"] = c1.children[1].text;
-        map["url"] = c1.children[1].attributes["href"];
-
-        html.Element c2 = e.children[1]; //第2行
-        List<Map> images = List();
-        c2.children.forEach((e) {
-          Map map = Map();
-          html.Element a = e.children[0]; //a
-          map["url"] = a.attributes["href"];
-          map["img"] = a.children[0].attributes["src"]; //img
-          images.add(map);
-        });
-        map["photos"] = images;
-        authors.add(map);
+        if(c1.children.length == 3){
+          map["avatar"] = c1.children[0].attributes["src"];
+          map["author"] = c1.children[1].text;
+          map["url"] = c1.children[1].attributes["href"];
+          html.Element c2 = e.children[1]; //第2行
+          List<Map> images = List();
+          c2.children.forEach((e) {
+            print("xxx");
+            Map map = Map();
+            html.Element a = e.children[0]; //a
+            map["url"] = a.attributes["href"];
+            String src = a.children[0].attributes["src"]; //img
+            if (src != null) {
+              map["img"] = src;
+              images.add(map);
+            }
+          });
+          map["photos"] = images;
+          authors.add(map);
+        }
       }
     });
 

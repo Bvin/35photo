@@ -33,7 +33,10 @@ class TabState extends State<ExploreTab>{
     return NestedScrollView(
         headerSliverBuilder: (buildContext, innerBoxIsScrolled) => <Widget>[
           SliverAppBar(
-            title: title(),
+            expandedHeight: 200,
+            flexibleSpace: FlexibleSpaceBar(
+              background: title(),
+            ),
           )
         ],
         body: Container(),
@@ -55,17 +58,43 @@ class TabState extends State<ExploreTab>{
           Text(map["author"]),
         ],),
         Row(
-          children: map["photos"].map((m)=> GestureDetector(
-            child: CachedNetworkImage(imageUrl: m["img"]),
-            onTap: (){
-              print(m["url"]);
-            },
-          )).toList(),
+          children: imgs(map["photos"]),
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         )
       ],
     );
   }
 
+  List<Widget> imgs(List<Map> maps){
+    return maps.map((m) => clickImage(m)).toList();
+  }
+
+  Widget clickImage(m){
+    return GestureDetector(
+      child: CachedNetworkImage(imageUrl: m["img"]),
+      onTap: (){
+        print(m["url"]);
+      },
+    );
+  }
+
+  authors(map){
+    return Row(children: <Widget>[
+      CircleAvatar(backgroundImage: CachedNetworkImageProvider(map["avatar"]),),
+      Text(map["author"]),
+    ],);
+  }
+
+  images(map){
+    return Row(
+      children: map["photos"].map((m)=> GestureDetector(
+        child: CachedNetworkImage(imageUrl: m["img"]),
+        onTap: (){
+          print(m["url"]);
+        },
+      )).toList(),
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    );
+  }
 }
 
