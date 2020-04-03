@@ -67,8 +67,8 @@ class TabState extends State<HomeTab>{
                 children: <Widget>[
                   CachedNetworkImage(imageUrl: map["img"], fit: BoxFit.cover,),
                   Positioned(
-                    bottom: 0,
-                    left: 1,
+                    bottom: 5,
+                    left: 5,
                     child: Text(map["author"],),
                   ),
                 ],
@@ -95,6 +95,7 @@ class TabState extends State<HomeTab>{
             subtitle: Text(map["subtitle"]),
           )
         ],
+        alignment: Alignment.bottomLeft,
       ),
       decoration: BoxDecoration(
           image: DecorationImage(
