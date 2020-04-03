@@ -14,24 +14,35 @@ class TabState extends State<HomeTab>{
 
   Dio _dio;
   List<Map> recommend;
+  List<Map> hots;
 
   @override
   void initState() {
     _dio = Dio();
     recommend = List();
+    hots = List();
     loadHtml();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return
-        GridView.count(crossAxisCount: 2,
-        childAspectRatio: 1.3,
-        children:recommend.map(
-                (map)=>gridItem(map["genre"], map["img"], map["author"])
-        ).toList(),)
-      ;
+    return Column(children: <Widget>[
+      Expanded(child: GridView.count(crossAxisCount: 2,
+        mainAxisSpacing: 5,
+        crossAxisSpacing: 5,
+        children: recommend.map(
+                (map) => gridItem(map["genre"], map["img"], map["author"])
+        ).toList(),))
+      ,
+      hots.isEmpty ? Container() :
+      Row(
+        children: <Widget>[
+          Expanded(child: card(hots[0])),
+          Expanded(child: card(hots[1]))
+        ],
+      )
+    ],);
   }
 
   Widget gridItem(genre,imageUrl, author){
@@ -61,18 +72,19 @@ class TabState extends State<HomeTab>{
         ],
         mainAxisSize: MainAxisSize.max,
       ),
+      color: Colors.black,
     );
   }
 
-  card(imageUrl, avatarUrl, title, subtitle) {
+  card(map) {
     return Stack(
       children: <Widget>[
-        CachedNetworkImage(imageUrl: imageUrl),
+        CachedNetworkImage(imageUrl: map["img"]),
         ListTile(
           leading: CircleAvatar(
-            backgroundImage: CachedNetworkImageProvider(avatarUrl),),
-          title: Text(title),
-          subtitle: Text(subtitle),
+            backgroundImage: CachedNetworkImageProvider(map["avatar"]),),
+          title: Text(map["title"]),
+          subtitle: Text(map["subtitle"]),
         )
       ],
     );
@@ -117,6 +129,21 @@ class TabState extends State<HomeTab>{
       //print(map);
       recommend.add(map);
     });
+
+    List<html.Element> part2 = document.getElementsByClassName("col-md-6 shadowFont");
+    part2.forEach((e){
+      Map map = Map();
+      html.Element e0 = e.children[0];//a
+      map["url"] = e0.attributes["href"];//
+      map["img"] = e0.children[0].attributes["src"];
+
+      html.Element e1 = e.children[1].children[0];//
+      map["avatar"] = e1.children[0].attributes["src"];
+      map["title"] = e1.children[1].text;
+      map["subtitle"] = e1.children[2].text;
+      hots.add(map);
+    });
+
     setState(() {});
   }
 }
