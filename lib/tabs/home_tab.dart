@@ -27,31 +27,41 @@ class TabState extends State<HomeTab>{
   Widget build(BuildContext context) {
     return
         GridView.count(crossAxisCount: 2,
+        childAspectRatio: 1.3,
         children:recommend.map(
-                (map)=>gridItem(map["genre"], map["img"], "")
+                (map)=>gridItem(map["genre"], map["img"], map["author"])
         ).toList(),)
       ;
   }
 
   Widget gridItem(genre,imageUrl, author){
-    return Container(child: Column(
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.all(10),
-          child: Text(genre,),
-        ),
-        Stack(
-          children: <Widget>[
-            CachedNetworkImage(imageUrl: imageUrl),
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: Text(author,),
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.all(10),
+            child: Text(genre,),
+          ),
+          Expanded(
+            child: Container(
+              child: Stack(
+                children: <Widget>[
+                  CachedNetworkImage(imageUrl: imageUrl, fit: BoxFit.cover,),
+                  Positioned(
+                    bottom: 0,
+                    left: 1,
+                    child: Text(author,),
+                  ),
+                ],
+                fit: StackFit.expand,
+                alignment: Alignment.bottomRight,
+              ),
             ),
-          ],
-          alignment: Alignment.bottomCenter,
-        )
-      ],
-    ),);
+          )
+        ],
+        mainAxisSize: MainAxisSize.max,
+      ),
+    );
   }
 
   card(imageUrl, avatarUrl, title, subtitle) {
@@ -103,7 +113,8 @@ class TabState extends State<HomeTab>{
       map["url"] = href.substring(href.indexOf('\'')+1,href.lastIndexOf('\''),);
       String style = children1.children[0].attributes["style"];
       map["img"] = style.substring(style.indexOf("https"),style.indexOf("jpg")+3);
-      print(map);
+      map["author"] = children1.children[1].text;
+      //print(map);
       recommend.add(map);
     });
     setState(() {});
