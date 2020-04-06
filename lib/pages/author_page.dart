@@ -48,6 +48,8 @@ class PageState extends  State<AuthorPage>{
   }
 
   load() async {
+    _showLoading = true;
+    setState(() {});
     Response response = await _dio.get(widget.url, options: Options(
       headers: {"Cookie":"user_login=bvin;token2=300d307489ac74db963ce362ae43833d;nude=true;"}
     ));
@@ -71,6 +73,7 @@ class PageState extends  State<AuthorPage>{
     _profile["followers"] = counters[0].children[0].children[0].text;
     _profile["photocount"] = counters[1].children[0].children[0].text;
     _profile["view"] = counters[2].children[0].children[0].text;
+    _showLoading = false;
     setState(() {});
 
     String param = data.substring(
@@ -81,13 +84,17 @@ class PageState extends  State<AuthorPage>{
         param.indexOf("showNextListId") + "showNextListId".length + 1,
         param.lastIndexOf(';'));
     _lastId = last_id;
+
+    _showLoading = true;
+    setState(() {});
+
     loadPhotos();
     print(last_id);
   }
 
   body() {
     if(_profile.isEmpty){
-      return Container();
+      return loading();
     }
     return NestedScrollView(
       headerSliverBuilder: (buildContext, innerBoxIsScrolled) =>
@@ -194,6 +201,7 @@ class PageState extends  State<AuthorPage>{
       html.Document document = html.Document.html(map["data"]);
       List<html.Element> elements = document.getElementsByClassName("showPrevPhoto");
       _photos.addAll(elements);
+      _showLoading = false;
       setState(() {});
       elements.forEach((e){
         String src = e.attributes["src"];
