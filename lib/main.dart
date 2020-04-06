@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:photo35/tabs/explore_tab.dart';
 import 'genres_page.dart';
@@ -25,6 +26,7 @@ class PageState extends State<MyApp>{
   @override
   void initState() {
     _dio = Dio();
+    _dio.interceptors.add(DioCacheManager(CacheConfig(baseUrl: "https://35photo.pro/")).interceptor);
     recommend = List();
     authors = List();
     loadHtml();
@@ -62,7 +64,7 @@ class PageState extends State<MyApp>{
 
   loadHtml() async {
     Response response = await _dio.get("https://35photo.pro/",
-        options: Options(
+        options: buildCacheOptions(Duration(hours: 8), options: Options(
             headers: {
               "Cookie":"user_login=bvin;token2=300d307489ac74db963ce362ae43833d;nude=true;"
             }
@@ -83,7 +85,7 @@ class PageState extends State<MyApp>{
           // session=a0m6l632om2m4sqr3140tp7qf2;
           // _gat=1;
           // _ym_visorc_52086456=w
-        )
+        )),
     );
     html.Document document = html.Document.html(response.data);
     List<html.Element> elements = document.getElementsByClassName("col-md-3 col-xs-6");
