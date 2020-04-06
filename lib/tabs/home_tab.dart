@@ -32,6 +32,8 @@ class TabState extends State<HomeTab>{
     return StaggeredGridView.countBuilder(
       itemCount: widget.recommend.length,
         crossAxisCount: 4,
+        crossAxisSpacing: 1,
+        mainAxisSpacing: 3,
         itemBuilder: (ctx,index){
           if(index<4){
             return gridItem(widget.recommend[index]);
