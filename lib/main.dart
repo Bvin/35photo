@@ -48,6 +48,7 @@ class PageState extends State<MyApp>{
               BottomNavigationBarItem(
                   icon: Icon(Icons.category), title: Text("Genres")),
             ],
+          currentIndex: currentPage,
           onTap: (index){
             currentPage = index;
             setState(() {});
