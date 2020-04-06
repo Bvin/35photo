@@ -55,7 +55,7 @@ class PageState extends  State<AuthorPage>{
     html.Document document = html.Document.html(data);
     html.Element profileContainer = document.getElementsByClassName("container-fluid shadowFont")[0];
     String style = profileContainer.attributes["style"];
-    String background = style.substring(style.indexOf('('),style.lastIndexOf(')'));
+    String background = style.substring(style.indexOf('(')+1,style.lastIndexOf(')'));
     html.Element avatarElement = profileContainer.getElementsByClassName("avatar140")[0];
     String avatar = avatarElement.attributes["src"];
     html.Element profileFormElement = profileContainer.getElementsByClassName("col-md-10 userNameBlock thinFont")[0];
