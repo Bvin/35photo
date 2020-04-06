@@ -15,6 +15,7 @@ class GenresPage extends StatefulWidget{
 class PageState extends State<GenresPage>{
 
   List<Map> _genres = List();
+  bool _showLoading = false;
 
   @override
   void initState() {
@@ -23,6 +24,8 @@ class PageState extends State<GenresPage>{
   }
 
   loadHtml() async {
+    _showLoading = true;
+    setState(() {});
     Dio dio = Dio();
     Response response = await dio.get("https://35photo.pro/genre/",
         options: Options(headers: {"Cookie":"nude=true"})//nude
@@ -47,6 +50,7 @@ class PageState extends State<GenresPage>{
       print(map);
       _genres.add(map);
     });
+    _showLoading = false;
     setState(() {});
   }
 
@@ -96,6 +100,15 @@ class PageState extends State<GenresPage>{
         ),
       ),
       onTap: onTap,
+    );
+  }
+
+  loading(){
+    return Center(
+      child: Visibility(
+        child: CircularProgressIndicator(),
+        visible: _showLoading,
+      ),
     );
   }
 }
