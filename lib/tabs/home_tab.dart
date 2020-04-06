@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:photo35/pages/photos_page.dart';
 
 class HomeTab extends StatefulWidget{
 
@@ -57,7 +58,7 @@ class TabState extends State<HomeTab>{
             child: Text(map["genre"],),
           ),
           Expanded(
-            child: Container(
+            child: GestureDetector(
               child: Stack(
                 children: <Widget>[
                   CachedNetworkImage(imageUrl: map["img"], fit: BoxFit.cover,),
@@ -70,6 +71,9 @@ class TabState extends State<HomeTab>{
                 fit: StackFit.expand,
                 alignment: Alignment.bottomRight,
               ),
+              onTap: (){
+                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => PhotosPage(map["url"])));
+              },
             ),
           )
         ],
@@ -77,6 +81,10 @@ class TabState extends State<HomeTab>{
       ),
       color: Colors.black,
     );
+  }
+
+  click(child, onTap) {
+    return GestureDetector(child: child, onTap: onTap,);
   }
 
   card(map) {

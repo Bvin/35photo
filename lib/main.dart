@@ -112,6 +112,7 @@ class PageState extends State<MyApp>{
       map["title"] = e1.children[1].text;
       map["subtitle"] = e1.children[2].text;
       recommend.add(map);
+      print(map);
     });
 
     List<html.Element> authorsElement = document.getElementsByClassName("col-md-6");
@@ -127,7 +128,6 @@ class PageState extends State<MyApp>{
           html.Element c2 = e.children[1]; //第2行
           List<Map> images = List();
           c2.children.forEach((e) {
-            print("xxx");
             Map map = Map();
             html.Element a = e.children[0]; //a
             map["url"] = a.attributes["href"];
