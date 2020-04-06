@@ -88,7 +88,7 @@ class TabState extends State<HomeTab>{
   }
 
   card(map) {
-    return Container(
+    return click(Container(
       child: Stack(
         children: <Widget>[
           ListTile(
@@ -100,13 +100,15 @@ class TabState extends State<HomeTab>{
         ],
         alignment: Alignment.bottomLeft,
       ),
-      decoration: BoxDecoration(
+      decoration: map["img"] == null ? null : BoxDecoration(
           image: DecorationImage(
               image: CachedNetworkImageProvider(map["img"]),
               fit: BoxFit.cover
           )
       ),
-    );
+    ), (){
+      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => PhotosPage(map["url"])));
+    });
   }
 
 }
