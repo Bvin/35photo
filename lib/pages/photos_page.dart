@@ -47,8 +47,11 @@ class PageState extends State<PhotosPage>{
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: page(),
+    return MaterialApp(
+      home: Scaffold(
+        body: SafeArea(child: page()),
+      ),
+      theme: ThemeData.dark(),
     );
   }
 
@@ -63,16 +66,26 @@ class PageState extends State<PhotosPage>{
           if(index == 0){
             return PhotoView(imageProvider: CachedNetworkImageProvider(_photoData["src"]));
           }else{
-            return grid();
+            return lastPage();
           }
         }else{
           if(index == _series.length){
-            return grid();
+            return lastPage();
           }else{
             return PhotoView(imageProvider: CachedNetworkImageProvider(_series[index]["src"]));
           }
         }
       },
+    );
+  }
+
+  lastPage(){
+    return Column(
+      children: <Widget>[
+        Padding(padding: EdgeInsets.symmetric(vertical: 70),child: author(),),
+        Expanded(child: grid(),),
+      ],
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
     );
   }
 
@@ -83,4 +96,31 @@ class PageState extends State<PhotosPage>{
     );
   }
 
+  author(){
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(bottom: 50),
+          child: Text(_photoData["user_name"], style: TextStyle(fontSize: 22),),
+        ),
+        Row(
+          children: <Widget>[
+          countView(Icons.remove_red_eye, _photoData["photo_see"]),
+          countView(Icons.favorite, _photoData["photo_fav"]),
+          countView(Icons.star, _photoData["photo_rating"]),
+        ],
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        )
+      ],
+    );
+  }
+
+  countView(icon, count){
+    return Column(
+      children: <Widget>[
+        Icon(icon),
+        Text(count.toString()),
+      ],
+    );
+  }
 }
