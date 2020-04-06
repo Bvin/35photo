@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:html/dom.dart' as dom;
 import 'package:photo_view/photo_view.dart';
+import 'author_page.dart';
 
 class PhotosPage extends StatefulWidget{
 
@@ -21,6 +23,7 @@ class PageState extends State<PhotosPage>{
   Map _photoData;
   List _series;
   List _others;
+  String _authorUrl;
 
   @override
   void initState() {
@@ -42,6 +45,10 @@ class PageState extends State<PhotosPage>{
     }
     _others = _photoData["other_photos"];
     print(_series);
+
+    dom.Document document = dom.Document.html(response.data);
+    dom.Element element = document.getElementById("userAvatar");
+    _authorUrl = element.attributes["href"];
     setState(() {});
   }
 
@@ -82,7 +89,15 @@ class PageState extends State<PhotosPage>{
   lastPage(){
     return Column(
       children: <Widget>[
-        Padding(padding: EdgeInsets.symmetric(vertical: 70),child: author(),),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 70),
+          child: GestureDetector(
+            child: author(),
+            onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>AuthorPage(_authorUrl)));
+            },
+          ),
+        ),
         Expanded(child: grid(),),
       ],
       mainAxisAlignment: MainAxisAlignment.spaceAround,
