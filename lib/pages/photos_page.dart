@@ -24,6 +24,7 @@ class PageState extends State<PhotosPage>{
   List _series;
   List _others;
   String _authorUrl;
+  bool _showLoading = false;
 
   @override
   void initState() {
@@ -33,6 +34,8 @@ class PageState extends State<PhotosPage>{
   }
 
   load() async {
+    _showLoading = true;
+    setState(() {});
     Response response = await _dio.get(widget.url);
     String html = response.data;
     String startPref = "photoData = ";
@@ -49,6 +52,7 @@ class PageState extends State<PhotosPage>{
     dom.Document document = dom.Document.html(response.data);
     dom.Element element = document.getElementById("userAvatar");
     _authorUrl = element.attributes["href"];
+    _showLoading = false;
     setState(() {});
   }
 
@@ -64,7 +68,7 @@ class PageState extends State<PhotosPage>{
 
   page(){
     if(_photoData == null){
-      return Container();
+      return loading();
     }
     return PageView.builder(
       itemCount: _series == null ? 2 : _series.length + 1,
@@ -83,6 +87,15 @@ class PageState extends State<PhotosPage>{
           }
         }
       },
+    );
+  }
+
+  loading(){
+    return Center(
+      child: Visibility(
+        child: CircularProgressIndicator(),
+        visible: _showLoading,
+      ),
     );
   }
 
