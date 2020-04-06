@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -26,10 +27,11 @@ class PageState extends State<PhotosPage>{
   load() async {
     Response response = await _dio.get(widget.url);
     String html = response.data;
-    int start = html.indexOf("photoData = {");
-    int end = html.lastIndexOf("};");
+    String startPref = "photoData = ";
+    int start = html.indexOf(startPref) + startPref.length;
+    int end = html.lastIndexOf("};") + 1;
     String json = html.substring(start,end);
-    print("$start-$end=>$json");
+    var result = jsonDecode(json);
   }
 
   @override
