@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/material.dart';
+import 'package:photo35/pages/condidates_page.dart';
 import 'package:photo35/tabs/explore_tab.dart';
 import 'genres_page.dart';
 import 'tabs/community_tab.dart';
@@ -23,6 +24,7 @@ class PageState extends State<MyApp>{
   Dio _dio;
   List<Map> recommend;
   List<Map> authors;
+  Widget _body;
 
   @override
   void initState() {
@@ -41,7 +43,9 @@ class PageState extends State<MyApp>{
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: _tabBodies == null ? Container() : _tabBodies[currentPage],
+        body: _tabBodies == null ? Container() : _body == null
+            ? _tabBodies[currentPage]
+            : _body,
         bottomNavigationBar: BottomNavigationBar(
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
@@ -59,6 +63,18 @@ class PageState extends State<MyApp>{
             setState(() {});
           },
         ),
+        drawer: Drawer(child: ListView(
+          children: <Widget>[
+            ListTile(title: Text("Home"), onTap: (){
+              _body = _tabBodies[currentPage];
+              setState(() {});
+            },),
+            ListTile(title: Text("Candidates"), onTap: (){
+              _body = CandidatesPage();
+              setState(() {});
+            },),
+          ],
+        ),),
       ),
       theme: ThemeData.dark(),
     );
