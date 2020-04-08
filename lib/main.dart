@@ -3,6 +3,7 @@ import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:photo35/tabs/explore_tab.dart';
 import 'genres_page.dart';
+import 'tabs/community_tab.dart';
 import 'tabs/home_tab.dart';
 import 'package:html/dom.dart' as html;
 
@@ -47,6 +48,8 @@ class PageState extends State<MyApp>{
                   icon: Icon(Icons.home), title: Text("Home")),
               BottomNavigationBarItem(
                   icon: Icon(Icons.explore), title: Text("Explore")),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.flag), title: Text("Community")),
               BottomNavigationBarItem(
                   icon: Icon(Icons.category), title: Text("Genres")),
             ],
@@ -146,7 +149,12 @@ class PageState extends State<MyApp>{
     });
 
 
-    _tabBodies = [HomeTab(recommend), ExploreTab(authors), GenresPage()];
+    _tabBodies = [
+      HomeTab(recommend),
+      ExploreTab(authors),
+      CommunityPage(),
+      GenresPage()
+    ];
     setState(() {});
   }
 }
