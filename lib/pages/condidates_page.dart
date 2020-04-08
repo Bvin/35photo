@@ -52,7 +52,7 @@ class PageState extends State<CandidatesPage>{
         ListTile(
           title: Text(map["title"]),
           subtitle: Text(map["subtitle"]),
-          trailing: Text("${map["count"]}photo"),
+          trailing: Text("${map["count"]}p"),
         ),
         SizedBox(
           height: 200,
@@ -63,6 +63,10 @@ class PageState extends State<CandidatesPage>{
             itemBuilder: (ctx, index) =>
                 CachedNetworkImage(imageUrl: images[index]),
           ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 15, left: 8, right: 8),
+          child: Divider(color: Colors.white54,),
         )
       ],
     );
@@ -84,7 +88,9 @@ class PageState extends State<CandidatesPage>{
           map["url"] = title.children[0].attributes["href"];
           map["title"] = title.children[0].text;
           map["subtitle"] = title.children[1].text;
-          map["count"] = row.getElementsByClassName("col-md-1 col-xs-3")[0].text;
+          map["count"] =
+              row.getElementsByClassName("col-md-1 col-xs-3")[0].children[0]
+                  .children[0].text;
         }
         html.Element imageRow = e.children[1];
         List<String> images = List();
