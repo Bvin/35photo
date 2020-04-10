@@ -181,6 +181,7 @@ class PageState extends State<PhotosPage>{
 
   grid() {
     return GridView.count(
+      physics: NeverScrollableScrollPhysics(),
       crossAxisCount: 3,
       children: _others.map((map) => CachedNetworkImage(imageUrl: map["src"])).toList(),
     );
