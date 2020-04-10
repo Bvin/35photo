@@ -59,18 +59,18 @@ class TabState extends State<HomeTab>{
             padding: EdgeInsets.symmetric(vertical: 8),
             child: Text(map["genre"],style: TextStyle(fontSize: 12),),
           ),
-          itemClick(Stack(
+          Expanded(child: itemClick(Stack(
             children: <Widget>[
               CachedNetworkImage(imageUrl: map["img"], fit: BoxFit.cover,),
               Positioned(
                 bottom: 5,
                 left: 5,
-                child: Text(map["author"],style: TextStyle(fontSize: 12),),
+                child: Text(map["author"], style: TextStyle(fontSize: 12),),
               ),
             ],
             fit: StackFit.expand,
             alignment: Alignment.bottomRight,
-          ), map),
+          ), map),),
         ],
         mainAxisSize: MainAxisSize.max,
       ),

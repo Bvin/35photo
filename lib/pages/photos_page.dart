@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:photo_view/photo_view.dart';
 import 'author_page.dart';
@@ -70,7 +71,7 @@ class PageState extends State<PhotosPage>{
     if(_photoData == null){
       return loading();
     }
-    return PageView.builder(
+    return Swiper(
       itemCount: _series == null ? 2 : _series.length + 1,
       itemBuilder: (ctx, index) {
         if(_series == null){
