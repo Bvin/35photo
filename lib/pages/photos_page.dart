@@ -41,7 +41,9 @@ class PageState extends State<PhotosPage>{
   load() async {
     _showLoading = true;
     setState(() {});
-    Response response = await _dio.get(widget.url, options: buildCacheOptions(Duration(minutes: 20)));
+    Response response = await _dio.get(widget.url,
+        options: buildCacheOptions(Duration(minutes: 20))
+    );
     String html = response.data;
     String startPref = "photoData = ";
     int start = html.indexOf(startPref) + startPref.length;

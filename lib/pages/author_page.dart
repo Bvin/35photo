@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:html/dom.dart' as html;
@@ -27,11 +28,12 @@ class PageState extends  State<AuthorPage>{
   List<html.Element> _photos;
   String _lastId = "";
   Map _profile = Map();
-  String _user_id = "";
+  String _userId = "";
 
   @override
   void initState() {
     _dio = Dio();
+    _dio.interceptors.add(DioCacheManager(CacheConfig()).interceptor);
     _photos = List();
     load();
     super.initState();
@@ -50,9 +52,15 @@ class PageState extends  State<AuthorPage>{
   load() async {
     _showLoading = true;
     setState(() {});
-    Response response = await _dio.get(widget.url, options: Options(
-      headers: {"Cookie":"user_login=bvin;token2=300d307489ac74db963ce362ae43833d;nude=true;"}
-    ));
+    Response response = await _dio.get(widget.url,
+      options: buildCacheOptions(Duration(minutes: 20),
+          options: Options(
+              headers: {
+                "Cookie": "user_login=bvin;token2=300d307489ac74db963ce362ae43833d;nude=true;"
+              }
+          )
+      ),
+    );
     String data = response.data;
     html.Document document = html.Document.html(data);
     html.Element profileContainer = document.getElementsByClassName("container-fluid shadowFont")[0];
@@ -79,7 +87,7 @@ class PageState extends  State<AuthorPage>{
     String param = data.substring(
         data.indexOf("user_id="), data.lastIndexOf("cantSetLike "));
     String user_id = param.substring("user_id=".length, param.indexOf('";'));
-    _user_id = user_id;
+    _userId = user_id;
     String last_id = param.substring(
         param.indexOf("showNextListId") + "showNextListId".length + 1,
         param.lastIndexOf(';'));
@@ -192,7 +200,7 @@ class PageState extends  State<AuthorPage>{
             "type": "getNextPageData",
             "page": "photoUser",
             "lastId": _lastId,
-            "user_id": _user_id,
+            "user_id": _userId,
           }
       );
       String data = response.data;
