@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -95,25 +96,50 @@ class PageState extends State<PhotosPage>{
           },
         ),
         PageViewIndicator(
-          normalBuilder: (animationController, index) => Circle(
-            size: 7,
-            color: Colors.white54,
-          ),
+          normalBuilder: (animationController, index) => indicator(index, count),
           highlightedBuilder:  (animationController, index) => ScaleTransition(
             scale: CurvedAnimation(
               parent: animationController,
               curve: Curves.ease,
             ),
-            child: Circle(
-              size: 8,
-              color: Colors.white,
-            ),
+            child: indicatorOnSelected(index, count),
           ),
           pageIndexNotifier: pageIndexNotifier,
           length: count,
         ),
       ],
       alignment: FractionalOffset.bottomCenter,
+    );
+  }
+
+  indicator(index, count){
+    if(index == count - 1){
+      return authorIndicator(6.0, Colors.white54);
+    }else{
+      return photoIndicator(7.0, Colors.white54);
+    }
+  }
+
+  indicatorOnSelected(index, count){
+    if(index == count - 1){
+      return authorIndicator(7.0, Colors.white);
+    }else{
+      return photoIndicator(8.0, Colors.white);
+    }
+  }
+
+  photoIndicator(size, color){
+    return Circle(
+      size: size,
+      color: color,
+    );
+  }
+
+  authorIndicator(size, color){
+    return Container(
+      width: size,
+      height: size,
+      color: color,
     );
   }
 
