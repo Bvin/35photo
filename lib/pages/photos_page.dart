@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:page_view_indicator/page_view_indicator.dart';
@@ -21,7 +22,7 @@ class PhotosPage extends StatefulWidget{
 }
 class PageState extends State<PhotosPage>{
 
-  var _dio;
+  Dio _dio;
   Map _photoData;
   List _series;
   List _others;
@@ -32,6 +33,7 @@ class PageState extends State<PhotosPage>{
   @override
   void initState() {
     _dio = Dio();
+    _dio.interceptors.add(DioCacheManager(CacheConfig()).interceptor);
     load();
     super.initState();
   }
@@ -39,7 +41,7 @@ class PageState extends State<PhotosPage>{
   load() async {
     _showLoading = true;
     setState(() {});
-    Response response = await _dio.get(widget.url);
+    Response response = await _dio.get(widget.url, options: buildCacheOptions(Duration(minutes: 20)));
     String html = response.data;
     String startPref = "photoData = ";
     int start = html.indexOf(startPref) + startPref.length;
