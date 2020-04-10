@@ -34,6 +34,7 @@ class TabState extends State<HomeTab>{
         crossAxisCount: 4,
         crossAxisSpacing: 1,
         mainAxisSpacing: 3,
+        padding: EdgeInsets.only(left: 2,right: 2,top: 24),
         itemBuilder: (ctx,index){
           if(index<4){
             return gridItem(widget.recommend[index]);
@@ -56,8 +57,8 @@ class TabState extends State<HomeTab>{
       child: Column(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.all(10),
-            child: Text(map["genre"],),
+            padding: EdgeInsets.symmetric(vertical: 8),
+            child: Text(map["genre"],style: TextStyle(fontSize: 12),),
           ),
           Expanded(
             child: GestureDetector(
@@ -67,7 +68,7 @@ class TabState extends State<HomeTab>{
                   Positioned(
                     bottom: 5,
                     left: 5,
-                    child: Text(map["author"],),
+                    child: Text(map["author"],style: TextStyle(fontSize: 12),),
                   ),
                 ],
                 fit: StackFit.expand,
@@ -83,10 +84,6 @@ class TabState extends State<HomeTab>{
       ),
       color: Colors.black,
     );
-  }
-
-  click(child, onTap) {
-    return GestureDetector(child: child, onTap: onTap,);
   }
 
   card(map) {
@@ -111,6 +108,10 @@ class TabState extends State<HomeTab>{
     ), (){
       Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => PhotosPage(map["url"])));
     });
+  }
+
+  click(child, onTap) {
+    return GestureDetector(child: child, onTap: onTap,);
   }
 
 }
