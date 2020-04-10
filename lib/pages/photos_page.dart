@@ -160,7 +160,7 @@ class PageState extends State<PhotosPage>{
     return Column(
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.symmetric(vertical: 70),
+          padding: EdgeInsets.only(top: 70, bottom: 30),
           child: GestureDetector(
             child: author(),
             onTap: (){
@@ -190,10 +190,10 @@ class PageState extends State<PhotosPage>{
         ),
         Row(
           children: <Widget>[
-          countView(Icons.remove_red_eye, _photoData["photo_see"]),
-          countView(Icons.favorite, _photoData["photo_fav"]),
-          countView(Icons.star, _photoData["photo_rating"]),
-        ],
+            countView(Icons.remove_red_eye, _photoData["photo_see"]),
+            countView(Icons.favorite, _photoData["photo_fav"]),
+            countView(Icons.star, _photoData["photo_rating"]),
+          ],
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         )
       ],
