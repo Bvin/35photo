@@ -46,6 +46,7 @@ class PageState extends  State<AuthorPage>{
         body: SafeArea(child: body()),
       ),
       theme: ThemeData.dark(),
+      debugShowCheckedModeBanner: false,
     );
   }
 
