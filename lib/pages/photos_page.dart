@@ -95,17 +95,20 @@ class PageState extends State<PhotosPage>{
             }
           },
         ),
-        PageViewIndicator(
-          normalBuilder: (animationController, index) => indicator(index, count),
-          highlightedBuilder:  (animationController, index) => ScaleTransition(
-            scale: CurvedAnimation(
-              parent: animationController,
-              curve: Curves.ease,
+        Padding(
+          padding: const EdgeInsets.only(bottom: 15),
+          child: PageViewIndicator(
+            normalBuilder: (animationController, index) => indicator(index, count),
+            highlightedBuilder:  (animationController, index) => ScaleTransition(
+              scale: CurvedAnimation(
+                parent: animationController,
+                curve: Curves.ease,
+              ),
+              child: indicatorOnSelected(index, count),
             ),
-            child: indicatorOnSelected(index, count),
+            pageIndexNotifier: pageIndexNotifier,
+            length: count,
           ),
-          pageIndexNotifier: pageIndexNotifier,
-          length: count,
         ),
       ],
       alignment: FractionalOffset.bottomCenter,
