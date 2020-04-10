@@ -162,20 +162,21 @@ class PageState extends State<PhotosPage>{
   }
 
   lastPage(){
-    return Column(
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(top: 70, bottom: 30),
-          child: GestureDetector(
+    return GestureDetector(
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(top: 70, bottom: 30),
             child: author(),
-            onTap: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>AuthorPage(_authorUrl)));
-            },
           ),
-        ),
-        Expanded(child: grid(),),
-      ],
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+          Expanded(child: grid(),),
+        ],
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+      ), onTap: () {
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (ctx) => AuthorPage(_authorUrl))
+      );
+    },
     );
   }
 
