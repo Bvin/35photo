@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:html/dom.dart' as dom;
+import 'package:page_view_indicator/page_view_indicator.dart';
 import 'package:photo_view/photo_view.dart';
 import 'author_page.dart';
 
@@ -26,6 +26,7 @@ class PageState extends State<PhotosPage>{
   List _others;
   String _authorUrl;
   bool _showLoading = false;
+  final pageIndexNotifier = ValueNotifier<int>(0);
 
   @override
   void initState() {
@@ -71,24 +72,52 @@ class PageState extends State<PhotosPage>{
     if(_photoData == null){
       return loading();
     }
-    return Swiper(
-      itemCount: _series == null ? 2 : _series.length + 1,
-      itemBuilder: (ctx, index) {
-        if(_series == null){
-          if(index == 0){
-            return PhotoView(imageProvider: CachedNetworkImageProvider(_photoData["src"]));
-          }else{
-            return lastPage();
-          }
-        }else{
-          if(index == _series.length){
-            return lastPage();
-          }else{
-            return PhotoView(imageProvider: CachedNetworkImageProvider(_series[index]["src"]));
-          }
-        }
-      },
+    return Stack(
+      children: <Widget>[
+        PageView.builder(
+          onPageChanged: (index) => pageIndexNotifier.value = index,
+          itemCount: pageCount(),
+          itemBuilder: (ctx, index) {
+            if(_series == null){
+              if(index == 0){
+                return PhotoView(imageProvider: CachedNetworkImageProvider(_photoData["src"]));
+              }else{
+                return lastPage();
+              }
+            }else{
+              if(index == _series.length){
+                return lastPage();
+              }else{
+                return PhotoView(imageProvider: CachedNetworkImageProvider(_series[index]["src"]));
+              }
+            }
+          },
+        ),
+        PageViewIndicator(
+          normalBuilder: (animationController, index) => Circle(
+            size: 8.0,
+            color: Colors.black87,
+          ),
+          highlightedBuilder:  (animationController, index) => ScaleTransition(
+            scale: CurvedAnimation(
+              parent: animationController,
+              curve: Curves.ease,
+            ),
+            child: Circle(
+              size: 12.0,
+              color: Colors.accents.elementAt((index + 3) * 3),
+            ),
+          ),
+          pageIndexNotifier: pageIndexNotifier,
+          length: pageCount(),
+        ),
+      ],
+      alignment: FractionalOffset.bottomCenter,
     );
+  }
+
+  pageCount(){
+    return _series == null ? 2 : _series.length + 1;
   }
 
   loading(){

@@ -77,6 +77,7 @@ class PageState extends State<MyApp>{
         ),),
       ),
       theme: ThemeData.dark(),
+      debugShowCheckedModeBanner: false,
     );
   }
 
