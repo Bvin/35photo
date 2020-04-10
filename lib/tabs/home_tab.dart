@@ -39,7 +39,7 @@ class TabState extends State<HomeTab>{
           if(index<4){
             return gridItem(widget.recommend[index]);
           }else{
-            return card(widget.recommend[index]);
+            return cardItem(widget.recommend[index]);
           }
         },
         staggeredTileBuilder: (index){
@@ -86,7 +86,7 @@ class TabState extends State<HomeTab>{
     );
   }
 
-  card(map) {
+  Widget cardItem(map) {
     return click(Container(
       child: Stack(
         children: <Widget>[
