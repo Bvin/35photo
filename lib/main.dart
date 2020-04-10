@@ -29,7 +29,7 @@ class PageState extends State<MyApp>{
   @override
   void initState() {
     _dio = Dio();
-    _dio.interceptors.add(DioCacheManager(CacheConfig(baseUrl: "https://35photo.pro/")).interceptor);
+    _dio.interceptors.add(DioCacheManager(CacheConfig()).interceptor);
     recommend = List();
     authors = List();
     loadHtml();
@@ -84,7 +84,7 @@ class PageState extends State<MyApp>{
 
   loadHtml() async {
     Response response = await _dio.get("https://35photo.pro/",
-        options: buildCacheOptions(Duration(hours: 8), options: Options(
+        options: buildCacheOptions(Duration(minutes: 20), options: Options(
             headers: {
               "Cookie":"user_login=bvin;token2=300d307489ac74db963ce362ae43833d;nude=true;"
             }
