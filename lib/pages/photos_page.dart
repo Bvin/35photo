@@ -49,7 +49,6 @@ class PageState extends State<PhotosPage>{
       _series = _photoData["series"];
     }
     _others = _photoData["other_photos"];
-    print(_series);
 
     dom.Document document = dom.Document.html(response.data);
     dom.Element element = document.getElementById("userAvatar");
@@ -62,8 +61,9 @@ class PageState extends State<PhotosPage>{
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: SafeArea(child: page()),
+        body: page(),
       ),
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.dark(),
     );
   }
@@ -72,11 +72,12 @@ class PageState extends State<PhotosPage>{
     if(_photoData == null){
       return loading();
     }
+    int count = pageCount();
     return Stack(
       children: <Widget>[
         PageView.builder(
           onPageChanged: (index) => pageIndexNotifier.value = index,
-          itemCount: pageCount(),
+          itemCount: count,
           itemBuilder: (ctx, index) {
             if(_series == null){
               if(index == 0){
@@ -95,8 +96,8 @@ class PageState extends State<PhotosPage>{
         ),
         PageViewIndicator(
           normalBuilder: (animationController, index) => Circle(
-            size: 8.0,
-            color: Colors.black87,
+            size: 7,
+            color: Colors.white54,
           ),
           highlightedBuilder:  (animationController, index) => ScaleTransition(
             scale: CurvedAnimation(
@@ -104,12 +105,12 @@ class PageState extends State<PhotosPage>{
               curve: Curves.ease,
             ),
             child: Circle(
-              size: 12.0,
-              color: Colors.accents.elementAt((index + 3) * 3),
+              size: 8,
+              color: Colors.white,
             ),
           ),
           pageIndexNotifier: pageIndexNotifier,
-          length: pageCount(),
+          length: count,
         ),
       ],
       alignment: FractionalOffset.bottomCenter,
