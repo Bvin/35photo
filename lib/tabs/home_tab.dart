@@ -17,7 +17,6 @@ class HomeTab extends StatefulWidget{
 
 class TabState extends State<HomeTab>{
 
-
   @override
   void initState() {
     super.initState();
@@ -60,25 +59,18 @@ class TabState extends State<HomeTab>{
             padding: EdgeInsets.symmetric(vertical: 8),
             child: Text(map["genre"],style: TextStyle(fontSize: 12),),
           ),
-          Expanded(
-            child: GestureDetector(
-              child: Stack(
-                children: <Widget>[
-                  CachedNetworkImage(imageUrl: map["img"], fit: BoxFit.cover,),
-                  Positioned(
-                    bottom: 5,
-                    left: 5,
-                    child: Text(map["author"],style: TextStyle(fontSize: 12),),
-                  ),
-                ],
-                fit: StackFit.expand,
-                alignment: Alignment.bottomRight,
+          itemClick(Stack(
+            children: <Widget>[
+              CachedNetworkImage(imageUrl: map["img"], fit: BoxFit.cover,),
+              Positioned(
+                bottom: 5,
+                left: 5,
+                child: Text(map["author"],style: TextStyle(fontSize: 12),),
               ),
-              onTap: (){
-                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => PhotosPage(map["url"])));
-              },
-            ),
-          )
+            ],
+            fit: StackFit.expand,
+            alignment: Alignment.bottomRight,
+          ), map),
         ],
         mainAxisSize: MainAxisSize.max,
       ),
@@ -87,7 +79,7 @@ class TabState extends State<HomeTab>{
   }
 
   Widget cardItem(map) {
-    return click(Container(
+    return itemClick(Container(
       child: Stack(
         children: <Widget>[
           ListTile(
@@ -105,13 +97,14 @@ class TabState extends State<HomeTab>{
               fit: BoxFit.cover
           )
       ),
-    ), (){
-      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => PhotosPage(map["url"])));
-    });
+    ), map);
   }
 
-  click(child, onTap) {
-    return GestureDetector(child: child, onTap: onTap,);
+  itemClick(child, map) {
+    return GestureDetector(child: child, onTap: () {
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (ctx) => PhotosPage(map["url"])));
+    },);
   }
 
 }
