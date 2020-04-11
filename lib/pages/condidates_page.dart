@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as html;
 
@@ -20,6 +21,7 @@ class PageState extends State<CandidatesPage>{
   @override
   void initState() {
     _dio = Dio();
+    _dio.interceptors.add(DioCacheManager(CacheConfig()).interceptor);
     load();
     super.initState();
   }
@@ -76,11 +78,12 @@ class PageState extends State<CandidatesPage>{
   load() async {
     _loading = true;
     setState(() {});
-    Response response = await _dio.get("https://35photo.pro/new/contender2/fresh_members/?page=1");
+    Response response = await _dio.get(
+        "https://35photo.pro/new/contender2/fresh_members/?page=0",
+        options: buildCacheOptions(Duration(hours: 3)));
     html.Document document = html.Document.html(response.data);
     html.Element element = document.getElementsByClassName("containerMain")[0].getElementsByClassName("container-fluid")[0];
     element.children.forEach((e){
-      print(e.outerHtml);
       Map map = Map();
       if(e.children.length > 0 ) {
         html.Element row = e.children[0];
