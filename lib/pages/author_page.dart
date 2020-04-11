@@ -204,9 +204,11 @@ class PageState extends  State<AuthorPage>{
   }
 
   loadPhotos() async {
-      Response response = await _dio.get("https://m1.35photo.pro/show_block.php",
+    try {
+      Response response = await _dio.get(
+          "https://m1.35photo.pro/show_block.php",
           options: Options(headers: {
-            "Cookie":"user_lang=en; _ga=GA1.2.1675562080.1585727189; _gid=GA1.2.1999997836.1585727189; _fbp=fb.1.1585727189511.1481881805; _ym_uid=15857915721044290429; _ym_d=1585791572; _ym_isad=2; user_login=bvin; token2=300d307489ac74db963ce362ae43833d; user_status=new; nude=true; me=fe9c78a3ad3f2178a32a04050d5de96d; session=6kcskbrq7ngidcgkhr60l9pkuh; user_lastEnter=1585818915 If-Modified-Since: Thu, 02 Apr 2020 09:14:48 GMT",
+            "Cookie": "user_lang=en; _ga=GA1.2.1675562080.1585727189; _gid=GA1.2.1999997836.1585727189; _fbp=fb.1.1585727189511.1481881805; _ym_uid=15857915721044290429; _ym_d=1585791572; _ym_isad=2; user_login=bvin; token2=300d307489ac74db963ce362ae43833d; user_status=new; nude=true; me=fe9c78a3ad3f2178a32a04050d5de96d; session=6kcskbrq7ngidcgkhr60l9pkuh; user_lastEnter=1585818915 If-Modified-Since: Thu, 02 Apr 2020 09:14:48 GMT",
           }),
           queryParameters: {
             "type": "getNextPageData",
@@ -219,17 +221,14 @@ class PageState extends  State<AuthorPage>{
       Map map = json.decode(data);
       //_lastId = map["lastId"];
       html.Document document = html.Document.html(map["data"]);
-      List<html.Element> elements = document.getElementsByClassName("showPrevPhoto");
+      List<html.Element> elements = document.getElementsByClassName(
+          "showPrevPhoto");
       _photos.addAll(elements);
       _showLoading = false;
       setState(() {});
-      elements.forEach((e){
-        String src = e.attributes["src"];
-        String alt = e.attributes["alt"];
-        String title = e.attributes["title"];
-        print(e);
-      });
-
-      //print(map["data"]);
+    } on DioError catch (e) {
+      _showLoading = false;
+      setState(() {});
     }
+  }
 }
