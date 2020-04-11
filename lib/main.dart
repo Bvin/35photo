@@ -123,9 +123,12 @@ class PageState extends State<MyApp>{
     });
 
     List<html.Element> part2 = document.getElementsByClassName("col-md-6 shadowFont");
-    part2.forEach((e){
+    part2.forEach((e){//aimg||gradientMainGenre
       Map map = Map();
       html.Element e0 = e.children[0];//a
+      if ("a".compareTo(e0.localName) != 0) {
+        e0 = e0.getElementsByTagName("a")[0];
+      }
       map["url"] = e0.attributes["href"];//
       map["img"] = e0.children[0].attributes["src"];
 
@@ -134,7 +137,6 @@ class PageState extends State<MyApp>{
       map["title"] = e1.children[1].text;
       map["subtitle"] = e1.children[2].text;
       recommend.add(map);
-      print(map);
     });
 
     List<html.Element> authorsElement = document.getElementsByClassName("col-md-6");
