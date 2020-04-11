@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as html;
+import 'package:photo35/photo_page.dart';
 
 class CandidatesPage extends StatefulWidget{
   @override
@@ -64,7 +65,13 @@ class PageState extends State<CandidatesPage>{
             shrinkWrap: true,
             itemCount: images.length,
             itemBuilder: (ctx, index) =>
-                CachedNetworkImage(imageUrl: images[index]),
+                GestureDetector(
+                  child: CachedNetworkImage(imageUrl: images[index]),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => PhotoPage(images[index])));
+                  },
+                ),
           ),
         ),
         Padding(
