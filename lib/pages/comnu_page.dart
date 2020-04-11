@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as html;
+import 'package:photo35/pages/photos_page.dart';
 
 class CommunityPage extends StatefulWidget{
 
@@ -18,8 +19,6 @@ class CommunityPage extends StatefulWidget{
 class PageState extends State<CommunityPage>{
 
   Dio _dio;
-
-  bool _loading = false;
   List<html.Element> _photos;
 
   @override
@@ -36,17 +35,21 @@ class PageState extends State<CommunityPage>{
     return GridView.count(
       crossAxisCount: 2,
       children: _photos.map((e) =>
-          CachedNetworkImage(imageUrl: e.attributes["src"])).toList(),
+          GestureDetector(
+            child: CachedNetworkImage(imageUrl: e.attributes["src"]),
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => PhotosPage(e.parent.attributes["href"])));
+            },
+          )
+      ).toList(),
     );
   }
 
   load() async {
-    _loading = true;
     setState(() {});
     Response response = await _dio.get(widget.url);
     html.Document document = html.Document.html(response.data);
     _photos.addAll(document.getElementsByClassName("prevr2"));
-    _loading = false;
     setState(() {});
   }
 
