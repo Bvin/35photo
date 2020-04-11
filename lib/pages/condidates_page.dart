@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as html;
+import 'package:photo35/pages/author_page.dart';
 import 'package:photo35/photo_page.dart';
 
 class CandidatesPage extends StatefulWidget{
@@ -53,10 +54,15 @@ class PageState extends State<CandidatesPage>{
     List<String> images = map["images"];
     return Column(
       children: <Widget>[
-        ListTile(
-          title: Text(map["title"]),
-          subtitle: Text(map["subtitle"]),
-          trailing: Text("${map["count"]}p"),
+        GestureDetector(
+          child: ListTile(
+            title: Text(map["title"]),
+            subtitle: Text(map["subtitle"]),
+            trailing: Text("${map["count"]}p"),
+          ),
+          onTap: () =>
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (ctx) => AuthorPage(map["url"]))),
         ),
         SizedBox(
           height: 200,
@@ -96,7 +102,7 @@ class PageState extends State<CandidatesPage>{
         html.Element row = e.children[0];
         if(row.children.isNotEmpty){
           html.Element title = row.children[0];
-          map["url"] = title.children[0].attributes["href"];
+          map["url"] = title.children[0].children[0].attributes["href"];
           map["title"] = title.children[0].text;
           map["subtitle"] = title.children[1].text;
           map["count"] =
