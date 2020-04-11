@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
@@ -114,8 +113,8 @@ class PageState extends  State<AuthorPage>{
             background: Stack(children: <Widget>[
               CachedNetworkImage(imageUrl: _profile["background"]),
               Column(children: <Widget>[
-                profile(_profile["avatar"], _profile["name"], _profile["desc"], _profile["place"]),
-                countBar(),
+                profile(_profile),
+                countBar(_profile),
               ], mainAxisAlignment: MainAxisAlignment.spaceEvenly,)
             ],),
           ),
@@ -125,27 +124,36 @@ class PageState extends  State<AuthorPage>{
     );
   }
 
-  profile(avatar,name,desc,place){
+  profile(map) {
     return Row(children: <Widget>[
       CircleAvatar(
-        backgroundImage: CachedNetworkImageProvider(avatar),
+        backgroundImage: CachedNetworkImageProvider(map["avatar"]),
+        radius: 45,
       ),
-      Column(children: <Widget>[
-        Text(name,style: TextStyle(fontSize: 20),),
-        Text(desc),
-        Row(children: <Widget>[
-          Icon(Icons.place),
-          Text(place, ),
-        ],)
-      ],),
-    ], mainAxisAlignment: MainAxisAlignment.center,);
+      Column(
+        children: <Widget>[
+          Text(map["name"], style: TextStyle(fontSize: 20),),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(map["desc"], style: TextStyle(color: Colors.white70),),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top:8.0, left: 16),
+            child: Row(children: <Widget>[
+              Icon(Icons.place, size: 14,),
+              Text(map["place"],),
+            ],),
+          )
+        ],
+      ),
+    ], mainAxisAlignment: MainAxisAlignment.center, );
   }
 
-  countBar(){
+  countBar(map){
     return Row(children: <Widget>[
-      countView(_profile["followers"], "followers"),
-      countView(_profile["photocount"], "view"),
-      countView(_profile["view"], "view photo"),
+      countView(map["followers"], "followers"),
+      countView(map["photocount"], "view"),
+      countView(map["view"], "view photo"),
     ],
     mainAxisAlignment: MainAxisAlignment.spaceAround,
     );
