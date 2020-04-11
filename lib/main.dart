@@ -77,9 +77,9 @@ class PageState extends State<HomePage>{
               setState(() {});
             },),
             ListTile(title: Text("Candidates"), onTap: (){
-              _body = CandidatesPage();
-              setState(() {});
               Navigator.pop(context);
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (ctx) => CandidatesPage()));
             },),
           ],
         ),),
