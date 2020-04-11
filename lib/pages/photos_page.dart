@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
@@ -86,7 +85,7 @@ class PageState extends State<PhotosPage>{
           itemBuilder: (ctx, index) {
             if(_series == null){
               if(index == 0){
-                return PhotoView(imageProvider: CachedNetworkImageProvider(_photoData["src"]));
+                return image(_photoData["src"]);
               }else{
                 return lastPage();
               }
@@ -94,7 +93,7 @@ class PageState extends State<PhotosPage>{
               if(index == _series.length){
                 return lastPage();
               }else{
-                return PhotoView(imageProvider: CachedNetworkImageProvider(_series[index]["src"]));
+                return image(_series[index]["src"]);
               }
             }
           },
@@ -116,6 +115,14 @@ class PageState extends State<PhotosPage>{
         ),
       ],
       alignment: FractionalOffset.bottomCenter,
+    );
+  }
+
+  image(url) {
+    return PhotoView(
+      imageProvider: CachedNetworkImageProvider(url),
+      loadingBuilder: (context, event) =>
+          Center(child: CircularProgressIndicator(),),
     );
   }
 
