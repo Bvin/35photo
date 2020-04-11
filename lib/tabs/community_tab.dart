@@ -1,22 +1,27 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as html;
+import 'package:photo35/pages/comnu_page.dart';
 
-class CommunityPage extends StatefulWidget{
+class CommunityTab extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
     return PageState();
   }
 }
 
-class PageState extends State<CommunityPage>{
+class PageState extends State<CommunityTab>{
 
   List<Map> communities = List();
   bool _showLoading = false;
+  Dio _dio;
 
   @override
   void initState() {
+    _dio = Dio();
+    _dio.interceptors.add(DioCacheManager(CacheConfig()).interceptor);
     load();
     super.initState();
   }
@@ -36,33 +41,39 @@ class PageState extends State<CommunityPage>{
 
   Widget item(map) {
     List<String> images = map["images"];
-    return Card(
-      child: Column(
-        children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Text(map["name"]),
+    return GestureDetector(
+      child: Card(
+        child: Column(
+          children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(map["name"]),
+          ),
+          Expanded(
+            child: GridView.count(
+              physics: NeverScrollableScrollPhysics(),
+              crossAxisCount: 3,
+              shrinkWrap: true,
+              children: images.map((img) => CachedNetworkImage(imageUrl: img))
+                  .toList()
+          ),
+          ),
+        ],
+          crossAxisAlignment: CrossAxisAlignment.start,
         ),
-        Expanded(
-          child: GridView.count(
-            physics: NeverScrollableScrollPhysics(),
-            crossAxisCount: 3,
-            shrinkWrap: true,
-            children: images.map((img) => CachedNetworkImage(imageUrl: img))
-                .toList()
-        ),
-        ),
-      ],
-        crossAxisAlignment: CrossAxisAlignment.start,
       ),
+      onTap: (){
+        Navigator.of(context).push(MaterialPageRoute(builder:
+            (ctx) => CommunityPage(map["url"])));
+      },
     );
   }
 
   load() async {
     _showLoading = true;
     setState(() {});
-    Dio dio = Dio();
-    Response response = await dio.get("https://35photo.pro/community/");
+    Response response = await _dio.get("https://35photo.pro/community/",
+        options: buildCacheOptions(Duration(hours: 3)));
     html.Document document = html.Document.html(response.data);
     html.Element element = document.getElementsByClassName("containerMain")[0];
     html.Element center = element.children[0].children[0].children[0];//center

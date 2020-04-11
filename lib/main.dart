@@ -171,7 +171,7 @@ class PageState extends State<MyApp>{
     _tabBodies = [
       HomeTab(recommend),
       ExploreTab(authors),
-      CommunityPage(),
+      CommunityTab(),
       GenresPage()
     ];
     setState(() {});
