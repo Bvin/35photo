@@ -7,6 +7,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:html/dom.dart' as html;
 
 import '../gallary_page.dart';
+import '../photo_page.dart';
 
 class AuthorPage extends StatefulWidget{
 
@@ -126,10 +127,12 @@ class PageState extends  State<AuthorPage>{
 
   profile(map) {
     return Row(children: <Widget>[
-      CircleAvatar(
+      GestureDetector(child: CircleAvatar(
         backgroundImage: CachedNetworkImageProvider(map["avatar"]),
         radius: 45,
-      ),
+      ), onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => PhotoPage(map["avatar"])));
+      },),
       Column(
         children: <Widget>[
           Text(map["name"], style: TextStyle(fontSize: 20),),
