@@ -227,6 +227,7 @@ class PageState extends  State<AuthorPage>{
       _showLoading = false;
       setState(() {});
     } on DioError catch (e) {
+      print(e);
       _showLoading = false;
       setState(() {});
     }
