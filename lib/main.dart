@@ -10,14 +10,25 @@ import 'package:html/dom.dart' as html;
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: HomePage(),
+      theme: ThemeData.dark(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class HomePage extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
     return PageState();
   }
 }
 
-class PageState extends State<MyApp>{
+class PageState extends State<HomePage>{
 
   List<Widget> _tabBodies;
   int currentPage = 0;
@@ -36,13 +47,9 @@ class PageState extends State<MyApp>{
     super.initState();
   }
 
-  loadGenres(){
-  }
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         body: _tabBodies == null ? Container() : _body == null
             ? _tabBodies[currentPage]
             : _body,
@@ -72,13 +79,11 @@ class PageState extends State<MyApp>{
             ListTile(title: Text("Candidates"), onTap: (){
               _body = CandidatesPage();
               setState(() {});
+              Navigator.pop(context);
             },),
           ],
         ),),
-      ),
-      theme: ThemeData.dark(),
-      debugShowCheckedModeBanner: false,
-    );
+      );
   }
 
 

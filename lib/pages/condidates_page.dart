@@ -31,6 +31,7 @@ class PageState extends State<CandidatesPage>{
         body: body(),
       ),
       theme: ThemeData.dark(),
+      debugShowCheckedModeBanner: false,
     );
   }
 
