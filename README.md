@@ -2,7 +2,7 @@
 
 35PHOTO app.
 35PHOTO是俄罗斯的一个高质量图片分享平台，35Photo针对每一张图片都是经过严格筛选的，可以说是每张图片都是精品。
-![image](https://raw.githubusercontent.com/Bvin/35photo/master/screenshots/pic1.jpg =400)
+![pic1 -w400](https://raw.githubusercontent.com/Bvin/35photo/master/screenshots/pic1.jpg)
 ![image](https://raw.githubusercontent.com/Bvin/35photo/master/screenshots/pic2.jpg =400)
 ![image](https://raw.githubusercontent.com/Bvin/35photo/master/screenshots/pic3.jpg =400)
 ![image](https://raw.githubusercontent.com/Bvin/35photo/master/screenshots/pic4.jpg =400)
