@@ -40,6 +40,7 @@ class TabState extends State<ExploreTab>{
         body: SafeArea(child: body()),
       ),
       theme: ThemeData.dark(),
+      debugShowCheckedModeBanner: false,
     );
   }
 

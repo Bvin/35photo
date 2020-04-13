@@ -40,6 +40,7 @@ class PageState extends State<GenresPhotoPage>{
         body: body(),
       ),
       theme: ThemeData.dark(),
+      debugShowCheckedModeBanner: false,
     );
   }
 
