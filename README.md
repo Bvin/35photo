@@ -1,16 +1,7 @@
-# photo35
+# 35PHOTO
 
-A new Flutter application.
+35PHOTO app.
+35PHOTO是俄罗斯的一个高质量图片分享平台，35Photo针对每一张图片都是经过严格筛选的，可以说是每张图片都是精品。
 
-## Getting Started
+开发不易，求打赏支持~
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
